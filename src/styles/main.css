@@ -1,0 +1,88 @@
+/* Reset margins and paddings */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+/* WebGL canvas placement */
+.webgl {
+  position: fixed;
+  top: 0;
+  left: 0;
+  outline: none;
+}
+
+/* Jitter animation style */
+.jitter {
+  animation: jittery 0.3s ease-in-out infinite forwards;
+  z-index: -10;
+}
+
+/* Interface wrapper positioning */
+.interface-wrapper {
+  width: 100%;
+  top: 64px;
+  left: 64px;
+  position: absolute;
+}
+
+/* Icon control dimensions */
+.icon-control-container {
+  height: 26.5px;
+  width: 26.5px;
+}
+
+/* Responsive layout for smaller screens */
+@media only screen and (max-width: 768px) {
+  .interface-wrapper {
+    top: 24px;
+    left: 24px;
+  }
+
+  .icon-control-container {
+    height: 19.5px;
+    width: 19.5px;
+  }
+}
+
+/* Jitter animation keyframes */
+@keyframes jittery {
+  10% {
+    transform: translate(-0.1px, -0.15px) scale(1);
+  }
+  20% {
+    transform: translate(0.15px, 0.1px) scale(1);
+  }
+  30% {
+    transform: translate(-0.2px, -0.25px) scale(1);
+  }
+  40% {
+    transform: translate(0.05px, 0.1px) scale(1);
+  }
+  50% {
+    transform: translate(-0.025px, -0.05px) scale(1);
+  }
+  60% {
+    transform: translate(0px, 0.075px) scale(1);
+  }
+  70% {
+    transform: translate(-0.075px, -0.1px) scale(1);
+  }
+  80% {
+    transform: translate(0.075px, 0.125px) scale(1);
+  }
+  90% {
+    transform: translate(-0.125px, -0.075px) scale(1);
+  }
+  100% {
+    transform: translate(0.075px, 0.025px) scale(1);
+  }
+}
