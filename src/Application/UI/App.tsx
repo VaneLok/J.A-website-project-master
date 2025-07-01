@@ -18,7 +18,7 @@ const App = () => {
     return (
         <div id="ui-app">
             {!loading && <HelpPrompt />}
-            {loading && <LoadingScreen />}
+            <LoadingScreen />
         </div>
     );
 };

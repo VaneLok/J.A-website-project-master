@@ -16,16 +16,6 @@ const LoadingScreen: React.FC = () => {
     const [webGLError, setWebGLError] = useState(false);
     const [counter, setCounter] = useState(0);
     const [resources, setResources] = useState<string[]>([]);
-    const [mobileWarning, setMobileWarning] = useState(window.innerWidth < 768);
-
-    const onResize = () => {
-        setMobileWarning(window.innerWidth < 768);
-    };
-
-    useEffect(() => {
-        window.addEventListener('resize', onResize);
-        return () => window.removeEventListener('resize', onResize);
-    }, []);
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -40,6 +30,7 @@ const LoadingScreen: React.FC = () => {
 
     useEffect(() => {
         const onResourceLoaded = (data: { name: string; loaded: number; total: number }) => {
+            console.log('Resource loaded:', data.name, `${data.loaded}/${data.total}`);
             setProgress(data.loaded / data.total);
             setToLoad(data.total);
             setLoaded(data.loaded);
@@ -69,12 +60,13 @@ const LoadingScreen: React.FC = () => {
         if (progress >= 1 && !webGLError) {
             setDoneLoading(true);
 
+            // Add minimum loading time of 2 seconds to ensure visibility
             setTimeout(() => {
                 setLoadingTextOpacity(0);
                 setTimeout(() => {
                     setStartPopupOpacity(1);
                 }, 500);
-            }, 1000);
+            }, 2000); // Increased from 1000ms to 2000ms
         }
     }, [progress]);
 
@@ -146,31 +138,31 @@ const LoadingScreen: React.FC = () => {
                     >
                         <div style={styles.logoContainer}>
                             <div>
-                                <p style={styles.green}>
+                                <p style={styles.pink}>
                                     <b>Jennifer Amaya,</b>
                                 </p>
-                                <p style={styles.green}>
+                                <p style={styles.pink}>
                                     <b>Jennifer Amaya Inc.</b>
                                 </p>
                             </div>
                         </div>
                         <div style={styles.headerInfo}>
                             <p>Released: 01/13/2000</p>
-                            <p>JABIOS (C)2000 Jennifer Amaya Inc.,</p>
+                            <p>JABIOS (C)2025 Jennifer Amaya Inc.,</p>
                         </div>
                     </div>
                     <div style={styles.body} className="loading-screen-body">
-                        <p>JAP S13 2000-2022 Special UC131S</p>
+                        <p>JAP S25 2000-2025 Special Cyber-Security Edition</p>
                         <div style={styles.spacer} />
                         {showBiosInfo && (
                             <>
-                                <p>JAP Showcase(tm) XX 113</p>
-                                <p>Checking RAM : {14000} OK</p>
+                                <p>JAP CyberSec(tm) Portfolio v2.5</p>
+                                <p>Checking RAM : {32768} OK</p>
                                 <div style={styles.spacer} />
                                 <div style={styles.spacer} />
                                 {showLoadingResources ? (
                                     progress === 1 ? (
-                                        <p>FINISHED LOADING RESOURCES</p>
+                                        <p style={styles.roseGold}>FINISHED LOADING RESOURCES</p>
                                     ) : (
                                         <p className="loading">
                                             LOADING RESOURCES ({loaded}/
@@ -192,10 +184,10 @@ const LoadingScreen: React.FC = () => {
                         {showLoadingResources && doneLoading && (
                             <p>
                                 All Content Loaded, launching{' '}
-                                <b style={styles.green}>
+                                <b style={styles.purple}>
                                     'Jennifer Amaya Cybersecurity Portfolio Showcase'
                                 </b>{' '}
-                                V1.0
+                                V2.5
                             </p>
                         )}
                         <div style={styles.spacer} />
@@ -219,21 +211,7 @@ const LoadingScreen: React.FC = () => {
                 })}
             >
                 <div style={styles.startPopup}>
-                    <p>Jennifer Amaya Cybersecurity Portfolio Showcase 2022</p>
-                    {mobileWarning && (
-                        <>
-                            <br />
-                            <b>
-                                <p style={styles.warning}>
-                                    WARNING: This experience is best viewed on
-                                </p>
-                                <p style={styles.warning}>
-                                    a desktop or laptop computer.
-                                </p>
-                            </b>
-                            <br />
-                        </>
-                    )}
+                    <p>Jennifer Amaya Cybersecurity Portfolio Showcase 2025</p>
                     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                         <p>Click start to begin{'\xa0'}</p>
                         <span className="blinking-cursor" />
@@ -281,6 +259,7 @@ const LoadingScreen: React.FC = () => {
 const styles: any = {
     overlay: {
         backgroundColor: 'black',
+        background: 'linear-gradient(135deg, #000000 0%, #0a0009 50%, #000000 100%)',
         width: '100%',
         height: '100%',
         display: 'flex',
@@ -336,17 +315,32 @@ const styles: any = {
     startPopup: {
         backgroundColor: '#000',
         padding: 24,
-        border: '7px solid #fff',
+        border: '3px solid #ff69b4',
+        borderRadius: '8px',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         maxWidth: 500,
+        boxShadow: '0 0 20px rgba(255, 105, 180, 0.3), inset 0 0 20px rgba(255, 105, 180, 0.1)',
+        background: 'linear-gradient(135deg, #000000 0%, #1a0a1a 100%)',
     },
     headerInfo: {
         marginLeft: 64,
     },
     green: {
         color: '#00ff00',
+    },
+    pink: {
+        color: '#ff69b4',
+        textShadow: '0 0 10px rgba(255, 105, 180, 0.5)',
+    },
+    purple: {
+        color: '#da70d6',
+        textShadow: '0 0 8px rgba(218, 112, 214, 0.4)',
+    },
+    roseGold: {
+        color: '#f7cac9',
+        textShadow: '0 0 6px rgba(247, 202, 201, 0.3)',
     },
     link: {
         color: '#4598ff',

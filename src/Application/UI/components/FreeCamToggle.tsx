@@ -7,9 +7,13 @@ import { Easing } from '../Animation';
 const camera = "/textures/UI/camera.svg";
 const mouse = "/textures/UI/mouse.svg";
 
-interface MuteToggleProps {}
+interface StyleSheetCSS {
+    [key: string]: React.CSSProperties;
+}
 
-const MuteToggle: React.FC<MuteToggleProps> = ({}) => {
+interface FreeCamToggleProps {}
+
+const FreeCamToggle: React.FC<FreeCamToggleProps> = ({}) => {
     const [isHovering, setIsHovering] = useState(false);
     const [isActive, setIsActive] = useState(false);
     const [freeCamActive, setFreeCamActive] = useState(false);
@@ -64,6 +68,7 @@ const MuteToggle: React.FC<MuteToggleProps> = ({}) => {
                     id="prevent-click"
                     src={freeCamActive ? mouse : camera}
                     style={{ opacity: isActive ? 0.2 : isHovering ? 0.8 : 1 }}
+                    width={iconSize}
                     height={iconSize}
                     animate={
                         isActive
@@ -105,11 +110,9 @@ const iconVars = {
     },
 };
 
-const styles: any = {
+const styles: StyleSheetCSS = {
     container: {
         background: 'black',
-        paddingLeft: 8,
-        paddingRight: 8,
         textAlign: 'center',
         display: 'flex',
         boxSizing: 'border-box',
@@ -124,4 +127,4 @@ const styles: any = {
     },
 };
 
-export default MuteToggle;
+export default FreeCamToggle;

@@ -7,6 +7,10 @@ import { Easing } from '../Animation';
 const volumeOn = "/textures/UI/volume_on.svg";
 const volumeOff = "/textures/UI/volume_off.svg";
 
+interface StyleSheetCSS {
+    [key: string]: React.CSSProperties;
+}
+
 interface MuteToggleProps {}
 
 const MuteToggle: React.FC<MuteToggleProps> = ({}) => {
@@ -24,7 +28,7 @@ const MuteToggle: React.FC<MuteToggleProps> = ({}) => {
         [muted]
     );
 
-    const iconSize = window.innerWidth < 768 ? 16 : 24;
+    const iconSize = window.innerWidth < 768 ? 8 : 10;
 
     const onMouseUpHandler = useCallback(() => {
         setIsActive(false);
@@ -59,6 +63,7 @@ const MuteToggle: React.FC<MuteToggleProps> = ({}) => {
                     alt={muted ? "Volume Off" : "Volume On"}
                     style={{ opacity: isActive ? 0.2 : isHovering ? 0.8 : 1 }}
                     height={iconSize}
+                    width={iconSize}
                     animate={
                         isActive
                             ? 'active'
@@ -99,11 +104,9 @@ const iconVars = {
     },
 };
 
-const styles: any = {
+const styles: StyleSheetCSS = {
     container: {
         background: 'black',
-        paddingLeft: 8,
-        paddingRight: 8,
         textAlign: 'center',
         display: 'flex',
         boxSizing: 'border-box',

@@ -6,7 +6,10 @@ interface InfoOverlayProps {
     visible: boolean;
 }
 
-// Updated text here
+interface StyleSheetCSS {
+    [key: string]: React.CSSProperties;
+}
+
 const NAME_TEXT = 'Jennifer Amaya';
 const TITLE_TEXT = 'Cybersecurity';
 const MULTIPLIER = 1;
