@@ -1,19 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import UIEventBus from '../EventBus';
 import { Easing } from '../Animation';
+import camera from '/textures/UI/camera.svg';
+import mouse from '/textures/UI/mouse.svg';
 
-// Use public paths for SVGs
-const camera = "/textures/UI/camera.svg";
-const mouse = "/textures/UI/mouse.svg";
+interface MuteToggleProps {}
 
-interface StyleSheetCSS {
-    [key: string]: React.CSSProperties;
-}
-
-interface FreeCamToggleProps {}
-
-const FreeCamToggle: React.FC<FreeCamToggleProps> = ({}) => {
+const MuteToggle: React.FC<MuteToggleProps> = ({}) => {
     const [isHovering, setIsHovering] = useState(false);
     const [isActive, setIsActive] = useState(false);
     const [freeCamActive, setFreeCamActive] = useState(false);
@@ -51,7 +45,7 @@ const FreeCamToggle: React.FC<FreeCamToggleProps> = ({}) => {
             window.postMessage({ type: 'keydown', key: `_AUTO_` }, '*');
             UIEventBus.dispatch('freeCamToggle', freeCamActive);
         }
-    }, [freeCamActive, blockEvents]);
+    }, [freeCamActive]);
 
     return (
         <div style={styles.wrapper}>
@@ -68,7 +62,6 @@ const FreeCamToggle: React.FC<FreeCamToggleProps> = ({}) => {
                     id="prevent-click"
                     src={freeCamActive ? mouse : camera}
                     style={{ opacity: isActive ? 0.2 : isHovering ? 0.8 : 1 }}
-                    width={iconSize}
                     height={iconSize}
                     animate={
                         isActive
@@ -80,12 +73,30 @@ const FreeCamToggle: React.FC<FreeCamToggleProps> = ({}) => {
                     variants={iconVars}
                 />
             </div>
+            {/* <motion.div
+                initial="hidden"
+                animate={freeCamActive ? 'active' : 'hidden'}
+                variants={indicatorVars}
+                style={Object.assign({}, styles.container, { marginLeft: 4 })}
+                id="prevent-click"
+            >
+                <p
+                    style={
+                        window.innerWidth < 768
+                            ? { fontSize: 8 }
+                            : { fontSize: 10 }
+                    }
+                >
+                    Free Cam Enabled
+                </p>
+            </motion.div> */}
         </div>
     );
 };
 
 const iconVars = {
     hovering: {
+        // scale: 1.2,
         opacity: 0.8,
         transition: {
             duration: 0.1,
@@ -110,11 +121,34 @@ const iconVars = {
     },
 };
 
+const indicatorVars = {
+    active: {
+        opacity: 1,
+        x: 0,
+        transition: {
+            duration: 0.2,
+            ease: Easing.expOut,
+        },
+    },
+    hidden: {
+        x: -4,
+        opacity: 0,
+        transition: {
+            duration: 0.2,
+            ease: Easing.expOut,
+        },
+    },
+};
+
 const styles: StyleSheetCSS = {
     container: {
         background: 'black',
+        // padding: 4,
+        paddingLeft: 8,
+        paddingRight: 8,
         textAlign: 'center',
         display: 'flex',
+        // position: 'absolute',
         boxSizing: 'border-box',
         justifyContent: 'center',
         alignItems: 'center',
@@ -127,4 +161,4 @@ const styles: StyleSheetCSS = {
     },
 };
 
-export default FreeCamToggle;
+export default MuteToggle;

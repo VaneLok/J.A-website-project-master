@@ -1,15 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import UIEventBus from '../EventBus';
 import { Easing } from '../Animation';
-
-// Use public paths for SVGs
-const volumeOn = "/textures/UI/volume_on.svg";
-const volumeOff = "/textures/UI/volume_off.svg";
-
-interface StyleSheetCSS {
-    [key: string]: React.CSSProperties;
-}
+import volumeOff from '/textures/UI/volume_off.svg';
+import volumeOn from '/textures/UI/volume_on.svg';
 
 interface MuteToggleProps {}
 
@@ -17,7 +11,6 @@ const MuteToggle: React.FC<MuteToggleProps> = ({}) => {
     const [isHovering, setIsHovering] = useState(false);
     const [isActive, setIsActive] = useState(false);
     const [muted, setMuted] = useState(false);
-    const [blockEvents, setBlockEvents] = useState(true);
 
     const onMouseDownHandler = useCallback(
         (event) => {
@@ -28,58 +21,41 @@ const MuteToggle: React.FC<MuteToggleProps> = ({}) => {
         [muted]
     );
 
-    const iconSize = window.innerWidth < 768 ? 8 : 10;
-
     const onMouseUpHandler = useCallback(() => {
         setIsActive(false);
     }, []);
 
     useEffect(() => {
-        setTimeout(() => {
-            setBlockEvents(false);
-        }, 100);
-    }, []);
-
-    useEffect(() => {
-        if (!blockEvents) {
-            UIEventBus.dispatch('muteToggle', muted);
-        }
-    }, [muted, blockEvents]);
+        UIEventBus.dispatch('muteToggle', muted);
+    }, [muted]);
 
     return (
-        <div style={styles.wrapper}>
-            <div
-                onMouseEnter={() => setIsHovering(true)}
-                onMouseLeave={() => setIsHovering(false)}
-                style={styles.container}
-                onMouseDown={onMouseDownHandler}
-                onMouseUp={onMouseUpHandler}
-                className="icon-control-container"
+        <div
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
+            style={styles.container}
+            onMouseDown={onMouseDownHandler}
+            onMouseUp={onMouseUpHandler}
+            className="icon-control-container"
+            id="prevent-click"
+        >
+            <motion.img
                 id="prevent-click"
-            >
-                <motion.img
-                    id="prevent-click"
-                    src={muted ? volumeOff : volumeOn}
-                    alt={muted ? "Volume Off" : "Volume On"}
-                    style={{ opacity: isActive ? 0.2 : isHovering ? 0.8 : 1 }}
-                    height={iconSize}
-                    width={iconSize}
-                    animate={
-                        isActive
-                            ? 'active'
-                            : isHovering
-                            ? 'hovering'
-                            : 'default'
-                    }
-                    variants={iconVars}
-                />
-            </div>
+                src={muted ? volumeOff : volumeOn}
+                style={{ opacity: isActive ? 0.2 : isHovering ? 0.8 : 1 }}
+                width={window.innerWidth < 768 ? 8 : 10}
+                animate={
+                    isActive ? 'active' : isHovering ? 'hovering' : 'default'
+                }
+                variants={iconVars}
+            />
         </div>
     );
 };
 
 const iconVars = {
     hovering: {
+        // scale: 1.2,
         opacity: 0.8,
         transition: {
             duration: 0.1,
@@ -107,17 +83,16 @@ const iconVars = {
 const styles: StyleSheetCSS = {
     container: {
         background: 'black',
+        // padding: 4,
+        // paddingLeft: 8,
+        // paddingRight: 8,
         textAlign: 'center',
         display: 'flex',
+        // position: 'absolute',
         boxSizing: 'border-box',
         justifyContent: 'center',
         alignItems: 'center',
         cursor: 'pointer',
-    },
-    wrapper: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
     },
 };
 

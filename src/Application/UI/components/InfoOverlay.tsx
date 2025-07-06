@@ -6,12 +6,8 @@ interface InfoOverlayProps {
     visible: boolean;
 }
 
-interface StyleSheetCSS {
-    [key: string]: React.CSSProperties;
-}
-
-const NAME_TEXT = 'Jennifer Amaya';
-const TITLE_TEXT = 'Cybersecurity';
+const NAME_TEXT = 'Henry Heffernan';
+const TITLE_TEXT = 'Software Engineer';
 const MULTIPLIER = 1;
 
 const InfoOverlay: React.FC<InfoOverlayProps> = ({ visible }) => {
@@ -167,6 +163,8 @@ const styles: StyleSheetCSS = {
         justifyContent: 'flex-start',
     },
     blinkingContainer: {
+        // width: 100,
+        // height: 100,
         marginLeft: 8,
         paddingBottom: 2,
         paddingRight: 4,

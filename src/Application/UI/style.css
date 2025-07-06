@@ -55,10 +55,9 @@ br {
     }
 }
 .blinking-cursor {
-    background-color: #ff69b4;
+    background-color: #fff;
     width: 0.8em;
     height: 0.15em;
-    box-shadow: 0 0 5px rgba(255, 105, 180, 0.5);
     -webkit-animation: 0.65s blink step-end infinite;
     -moz-animation: 0.65s blink step-end infinite;
     -ms-animation: 0.65s blink step-end infinite;
@@ -70,11 +69,9 @@ br {
     from,
     to {
         background-color: transparent;
-        box-shadow: none;
     }
     50% {
-        background-color: #ff69b4;
-        box-shadow: 0 0 8px rgba(255, 105, 180, 0.7);
+        background-color: white;
     }
 }
 
@@ -120,28 +117,18 @@ br {
 
 .bios-start-button {
     background-color: #000;
-    border: 3px solid #ff69b4;
-    border-radius: 6px;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 10px rgba(255, 105, 180, 0.3);
+    border: 4px solid #fff;
+    border-width: 4px 3px 4px 3px;
 }
 
 .bios-start-button p {
     box-sizing: border-box;
-    padding: 12px 20px;
-    color: #ff69b4;
-    font-weight: bold;
-    transition: all 0.3s ease;
-}
-
-.bios-start-button:hover {
-    background: linear-gradient(135deg, #ff69b4 0%, #da70d6 100%);
-    cursor: pointer;
-    box-shadow: 0 0 20px rgba(255, 105, 180, 0.6);
-    transform: translateY(-2px);
+    padding: 8px;
 }
 
 .bios-start-button:hover p {
+    background-color: #fff;
+    cursor: pointer;
     color: #000;
 }
 
@@ -176,10 +163,9 @@ br {
     }
 
     .blinking-cursor {
-        background-color: #ff69b4;
+        background-color: #fff;
         width: 0.4em;
         height: 0.08em;
-        box-shadow: 0 0 3px rgba(255, 105, 180, 0.5);
         -webkit-animation: 0.65s blink step-end infinite;
         -moz-animation: 0.65s blink step-end infinite;
         -ms-animation: 0.65s blink step-end infinite;

@@ -3,10 +3,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import UIEventBus from '../EventBus';
 
-interface StyleSheetCSS {
-    [key: string]: React.CSSProperties;
-}
-
 const HELP_TEXT = 'Click anywhere to begin';
 
 type HelpPromptProps = {};

@@ -4,10 +4,8 @@ import Application from './Application';
 import Sizes from './Utils/Sizes';
 import Camera from './Camera/Camera';
 import UIEventBus from './UI/EventBus';
-// @ts-ignore
-import screenVert from './Shaders/screen/vertex.glsl';
-// @ts-ignore
-import screenFrag from './Shaders/screen/fragment.glsl';
+import screenVert from './Shaders/screen/vertex.glsl?raw';
+import screenFrag from './Shaders/screen/fragment.glsl?raw';
 import Time from './Utils/Time';
 
 export default class Renderer {
@@ -46,8 +44,7 @@ export default class Renderer {
             powerPreference: 'high-performance',
         });
         // Settings
-        // this.instance.physicallyCorrectLights = true;
-        this.instance.outputEncoding = THREE.sRGBEncoding;
+        this.instance.outputColorSpace = THREE.SRGBColorSpace;
         // this.instance.toneMapping = THREE.ACESFilmicToneMapping;
         // this.instance.toneMappingExposure = 0.9;
         this.instance.setSize(this.sizes.width, this.sizes.height);

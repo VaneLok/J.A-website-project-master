@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import UIEventBus from '../EventBus';
+import eventBus from '../EventBus';
 
-const LoadingScreen: React.FC = () => {
+type LoadingProps = {};
+
+const LoadingScreen: React.FC<LoadingProps> = () => {
     const [progress, setProgress] = useState(0);
     const [toLoad, setToLoad] = useState(0);
     const [loaded, setLoaded] = useState(0);
@@ -15,7 +17,18 @@ const LoadingScreen: React.FC = () => {
     const [doneLoading, setDoneLoading] = useState(false);
     const [webGLError, setWebGLError] = useState(false);
     const [counter, setCounter] = useState(0);
-    const [resources, setResources] = useState<string[]>([]);
+    const [resources] = useState<string[]>([]);
+    const [mobileWarning, setMobileWarning] = useState(window.innerWidth < 768);
+
+    const onResize = () => {
+        if (window.innerWidth < 768) {
+            setMobileWarning(true);
+        } else {
+            setMobileWarning(false);
+        }
+    };
+
+    window.addEventListener('resize', onResize);
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -29,26 +42,19 @@ const LoadingScreen: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        const onResourceLoaded = (data: { name: string; loaded: number; total: number }) => {
-            console.log('Resource loaded:', data.name, `${data.loaded}/${data.total}`);
-            setProgress(data.loaded / data.total);
-            setToLoad(data.total);
+        eventBus.on('loadedSource', (data) => {
+            setProgress(data.progress);
+            setToLoad(data.toLoad);
             setLoaded(data.loaded);
-            setResources((prev) => {
-                const updated = [
-                    ...prev,
-                    `Loaded ${data.name}${getSpace(data.name)} ... ${Math.round((data.loaded / data.total) * 100)}%`
-                ];
-                return updated.length > 8 ? updated.slice(-8) : updated;
-            });
-        };
-
-        UIEventBus.on('resourceLoaded', onResourceLoaded);
-
-        return () => {
-            // Remove listener if your event bus supports it
-            // UIEventBus.remove('resourceLoaded', onResourceLoaded);
-        };
+            resources.push(
+                `Loaded ${data.sourceName}${getSpace(
+                    data.sourceName
+                )} ... ${Math.round(data.progress * 100)}%`
+            );
+            if (resources.length > 8) {
+                resources.shift();
+            }
+        });
     }, []);
 
     useEffect(() => {
@@ -60,13 +66,12 @@ const LoadingScreen: React.FC = () => {
         if (progress >= 1 && !webGLError) {
             setDoneLoading(true);
 
-            // Add minimum loading time of 2 seconds to ensure visibility
             setTimeout(() => {
                 setLoadingTextOpacity(0);
                 setTimeout(() => {
                     setStartPopupOpacity(1);
                 }, 500);
-            }, 2000); // Increased from 1000ms to 2000ms
+            }, 1000);
         }
     }, [progress]);
 
@@ -80,7 +85,7 @@ const LoadingScreen: React.FC = () => {
 
     const start = useCallback(() => {
         setLoadingOverlayOpacity(0);
-        UIEventBus.dispatch('loadingScreenDone', {});
+        eventBus.dispatch('loadingScreenDone', {});
         const ui = document.getElementById('ui');
         if (ui) {
             ui.style.pointerEvents = 'none';
@@ -98,6 +103,7 @@ const LoadingScreen: React.FC = () => {
         const month = date.getMonth() + 1;
         const day = date.getDate();
         const year = date.getFullYear();
+        // add leading zero
         const monthFormatted = month < 10 ? `0${month}` : month;
         const dayFormatted = day < 10 ? `0${day}` : day;
         return `${monthFormatted}/${dayFormatted}/${year}`;
@@ -105,9 +111,12 @@ const LoadingScreen: React.FC = () => {
 
     const detectWebGLContext = () => {
         var canvas = document.createElement('canvas');
+
+        // Get WebGLRenderingContext from canvas element.
         var gl =
             canvas.getContext('webgl') ||
             canvas.getContext('experimental-webgl');
+        // Report the result.
         if (gl && gl instanceof WebGLRenderingContext) {
             return true;
         }
@@ -138,31 +147,31 @@ const LoadingScreen: React.FC = () => {
                     >
                         <div style={styles.logoContainer}>
                             <div>
-                                <p style={styles.pink}>
-                                    <b>Jennifer Amaya,</b>
+                                <p style={styles.green}>
+                                    <b>Heffernan,</b>{' '}
                                 </p>
-                                <p style={styles.pink}>
-                                    <b>Jennifer Amaya Inc.</b>
+                                <p style={styles.green}>
+                                    <b>Henry Inc.</b>
                                 </p>
                             </div>
                         </div>
                         <div style={styles.headerInfo}>
                             <p>Released: 01/13/2000</p>
-                            <p>JABIOS (C)2025 Jennifer Amaya Inc.,</p>
+                            <p>HHBIOS (C)2000 Heffernan Henry Inc.,</p>
                         </div>
                     </div>
                     <div style={styles.body} className="loading-screen-body">
-                        <p>JAP S25 2000-2025 Special Cyber-Security Edition</p>
+                        <p>HSP S13 2000-2022 Special UC131S</p>
                         <div style={styles.spacer} />
                         {showBiosInfo && (
                             <>
-                                <p>JAP CyberSec(tm) Portfolio v2.5</p>
-                                <p>Checking RAM : {32768} OK</p>
+                                <p>HSP Showcase(tm) XX 113</p>
+                                <p>Checking RAM : {14000} OK</p>
                                 <div style={styles.spacer} />
                                 <div style={styles.spacer} />
                                 {showLoadingResources ? (
-                                    progress === 1 ? (
-                                        <p style={styles.roseGold}>FINISHED LOADING RESOURCES</p>
+                                    progress == 1 ? (
+                                        <p>FINISHED LOADING RESOURCES</p>
                                     ) : (
                                         <p className="loading">
                                             LOADING RESOURCES ({loaded}/
@@ -184,10 +193,10 @@ const LoadingScreen: React.FC = () => {
                         {showLoadingResources && doneLoading && (
                             <p>
                                 All Content Loaded, launching{' '}
-                                <b style={styles.purple}>
-                                    'Jennifer Amaya Cybersecurity Portfolio Showcase'
+                                <b style={styles.green}>
+                                    'Henry Heffernan Portfolio Showcase'
                                 </b>{' '}
-                                V2.5
+                                V1.0
                             </p>
                         )}
                         <div style={styles.spacer} />
@@ -211,7 +220,27 @@ const LoadingScreen: React.FC = () => {
                 })}
             >
                 <div style={styles.startPopup}>
-                    <p>Jennifer Amaya Cybersecurity Portfolio Showcase 2025</p>
+                    {/* <p style={styles.red}>
+                        <b>THIS SITE IS CURRENTLY A W.I.P.</b>
+                    </p>
+                    <p>But do enjoy what I have done so far :)</p>
+                    <div style={styles.spacer} />
+                    <div style={styles.spacer} /> */}
+                    <p>Henry Heffernan Portfolio Showcase 2022</p>
+                    {mobileWarning && (
+                        <>
+                            <br />
+                            <b>
+                                <p style={styles.warning}>
+                                    WARNING: This experience is best viewed on
+                                </p>
+                                <p style={styles.warning}>
+                                    a desktop or laptop computer.
+                                </p>
+                            </b>
+                            <br />
+                        </>
+                    )}
                     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                         <p>Click start to begin{'\xa0'}</p>
                         <span className="blinking-cursor" />
@@ -256,10 +285,9 @@ const LoadingScreen: React.FC = () => {
     );
 };
 
-const styles: any = {
+const styles: StyleSheetCSS = {
     overlay: {
         backgroundColor: 'black',
-        background: 'linear-gradient(135deg, #000000 0%, #0a0009 50%, #000000 100%)',
         width: '100%',
         height: '100%',
         display: 'flex',
@@ -315,14 +343,12 @@ const styles: any = {
     startPopup: {
         backgroundColor: '#000',
         padding: 24,
-        border: '3px solid #ff69b4',
-        borderRadius: '8px',
+        border: '7px solid #fff',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         maxWidth: 500,
-        boxShadow: '0 0 20px rgba(255, 105, 180, 0.3), inset 0 0 20px rgba(255, 105, 180, 0.1)',
-        background: 'linear-gradient(135deg, #000000 0%, #1a0a1a 100%)',
+        // alignItems: 'center',
     },
     headerInfo: {
         marginLeft: 64,
@@ -330,23 +356,15 @@ const styles: any = {
     green: {
         color: '#00ff00',
     },
-    pink: {
-        color: '#ff69b4',
-        textShadow: '0 0 10px rgba(255, 105, 180, 0.5)',
-    },
-    purple: {
-        color: '#da70d6',
-        textShadow: '0 0 8px rgba(218, 112, 214, 0.4)',
-    },
-    roseGold: {
-        color: '#f7cac9',
-        textShadow: '0 0 6px rgba(247, 202, 201, 0.3)',
-    },
     link: {
+        // textDecoration: 'none',
         color: '#4598ff',
         cursor: 'pointer',
     },
     overlayText: {
+        fontFamily: 'monospace',
+        color: '#fff',
+        padding: 48,
         width: '100%',
         height: '100%',
         display: 'flex',

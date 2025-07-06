@@ -1,58 +1,29 @@
-# Cyber Portfolio
+# henryheffernan.com
 
-## Overview
-This project is a modern cyber portfolio website that integrates Three.js for 3D graphics. It serves as a personal showcase for skills, projects, and experiences in the field of cybersecurity and web development.
+This is one of two repositories created for my portfolio website <a href="https://henryheffernan.com/"><samp>henryheffernan.com</samp></a>. If you are looking for the 2D OS repository you can find it <a href="https://github.com/henryjeff/portfolio-inner-site"><samp>here</samp></a>! Thanks for taking the time to check this out. If you have any questions of comments, feel free to shoot me an email at <samp><a href="mailto:henryheffernan@gmail.com">henryheffernan@gmail.com</a></samp> or you can DM me on twitter <a href="https://twitter.com/henryheffernan"><samp>@henryheffernan</samp></a>.
 
-## Project Structure
-```
-cyber-portfolio
-├── public
-│   └── index.html
-├── src
-│   ├── components
-│   │   └── ThreeScene.js
-│   ├── styles
-│   │   └── main.css
-│   ├── assets
-│   └── App.js
-├── package.json
-└── README.md
+<br>
+
+To setup a dev environment:
+
+```bash
+# Clone the repository
+
+# Install dependencies 
+npm i
+
+# Run the local dev server
+npm run dev
 ```
 
-## Setup Instructions
+To serve a production build:
 
-1. **Clone the Repository**
-   ```bash
-   git clone <repository-url>
-   cd cyber-portfolio
-   ```
+```bash
+# Install dependencies if not already done - 'npi i'
 
-2. **Install Dependencies**
-   Ensure you have Node.js installed, then run:
-   ```bash
-   npm install
-   ```
+# Build for production
+npm run build
 
-3. **Run the Application**
-   Start the development server:
-   ```bash
-   npm start
-   ```
-
-4. **Open in Browser**
-   Navigate to `http://localhost:3000` to view your portfolio.
-
-## Usage
-- The main entry point is `public/index.html`, which links to the compiled JavaScript and CSS files.
-- The `src/App.js` file imports the `ThreeScene` component, which initializes and renders the Three.js scene.
-- Customize the `src/styles/main.css` to modify the appearance of your portfolio.
-
-## Development
-- To add new features or components, create them in the `src/components` directory.
-- Store any static assets like images or models in the `src/assets` directory.
-
-## Contributing
-Feel free to fork the repository and submit pull requests for any improvements or features you would like to add.
-
-## License
-This project is licensed under the MIT License.
+# Serve the build using express
+npm start
+```
